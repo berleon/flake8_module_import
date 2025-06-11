@@ -12,8 +12,16 @@ class ModuleImportChecker:
     def __init__(self, tree: ast.Module) -> None:
         self.tree = tree
         self.direct_imports = {
-            "pathlib", "typing", "__future__", "dataclasses", "pydantic",
-            "collections", "math"
+            "pathlib",
+            "typing",
+            "__future__",
+            "dataclasses",
+            "pydantic",
+            "collections",
+            "math",
+            "enum",
+            "functools",
+            "itertools",
         }
 
     def is_module(self, module: str, name: str) -> bool:
@@ -22,6 +30,7 @@ class ModuleImportChecker:
         try:
             return importlib.util.find_spec(full_name) is not None
         except ModuleNotFoundError:
+            print(f"ModuleNotFoundError: {full_name}")
             return False
 
     def run(
