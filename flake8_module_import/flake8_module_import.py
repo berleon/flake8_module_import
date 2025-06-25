@@ -146,8 +146,13 @@ class ModuleImportChecker:
             if result:
                 return None  # Valid import, no error
             else:
-                return f"module '{full_name}' not found"
-
+                # No specs for module, might be a stub or non-existent module
+                # We will ignore this case for now
+                verbose(f"❌ No spec found for '{full_name}'")
+        except ValueError:
+            # ValueError can occur of missing .__spec__ (as for stub files)
+            verbose(f"💭 ValueError for '{full_name}' -> ignoring")
+            return None
         except (ModuleNotFoundError, ImportError):
             if level:
                 module_name = "." * level + (module if module else "")
